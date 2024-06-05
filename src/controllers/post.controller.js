@@ -28,7 +28,7 @@ const postPost = asyncHandler(async (req, res) => {
 const getPost = asyncHandler(async (req, res) => {
   const data = await Posts.find();
   return res
-    .status(201)
+    .status(200)
     .json(new ApiResponse(200, data, "post sent successfully"));
 });
 
