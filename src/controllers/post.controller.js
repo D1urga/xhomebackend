@@ -3,6 +3,7 @@ import { ApiError } from "../utils/apiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { Posts } from "../models/post.model.js";
+import { ObjectId } from "bson";
 
 const postPost = asyncHandler(async (req, res) => {
   const { owner } = req.params;
@@ -26,6 +27,8 @@ const postPost = asyncHandler(async (req, res) => {
 });
 
 const getPost = asyncHandler(async (req, res) => {
+  const { currentUser } = req.params;
+  const objectId = new ObjectId(currentUser);
   const data = await Posts.aggregate([
     {
       $lookup: {
@@ -63,6 +66,13 @@ const getPost = asyncHandler(async (req, res) => {
     },
     { $addFields: { totalComments: { $size: "$comments" } } },
     { $addFields: { totalLikes: { $size: "$likes" } } },
+    {
+      $addFields: {
+        isliked: {
+          $in: [objectId, "$likes.userid"],
+        },
+      },
+    },
   ]);
   return res
     .status(200)

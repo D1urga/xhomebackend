@@ -8,6 +8,6 @@ router
   .route("/postPost/:owner")
   .post(upload.fields([{ name: "img", maxCount: 1 }]), postPost);
 
-router.route("/getPost").get(getPost);
+router.route("/getPost/:currentUser").get(getPost);
 
 export default router;
