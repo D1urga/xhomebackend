@@ -61,6 +61,8 @@ const getPost = asyncHandler(async (req, res) => {
         as: "likes",
       },
     },
+    { $addFields: { totalComments: { $size: "$comments" } } },
+    { $addFields: { totalLikes: { $size: "$likes" } } },
   ]);
   return res
     .status(200)
