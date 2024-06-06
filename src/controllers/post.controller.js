@@ -32,6 +32,22 @@ const getPost = asyncHandler(async (req, res) => {
   const data = await Posts.aggregate([
     {
       $lookup: {
+        localField: "owner",
+        foreignField: "_id",
+        from: "users",
+        as: "Parentuser",
+        pipeline: [
+          {
+            $project: {
+              username: 1,
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
         localField: "_id",
         foreignField: "owner",
         from: "postcomments",
