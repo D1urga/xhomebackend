@@ -9,7 +9,7 @@ import { Likes } from "../models/like.model.js";
 const postlike = asyncHandler(async (req, res) => {
   const { userid, owner } = req.params;
 
-  const isfound = await Likes.findOne({ userid });
+  const isfound = await Likes.findOne({ $and: [{ userid }, { owner }] });
   console.log(isfound);
   if (!isfound) {
     const data = await Likes.create({ userid, owner });
@@ -17,7 +17,7 @@ const postlike = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, data, "posted successfulyy"));
   } else {
-    await Likes.deleteOne({ userid });
+    await Likes.deleteOne({ $and: [{ userid }, { owner }] });
     return res
       .status(200)
       .json(new ApiResponse(200, { data: "deleted" }, "deleted"));
