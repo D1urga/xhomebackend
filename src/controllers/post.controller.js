@@ -26,7 +26,42 @@ const postPost = asyncHandler(async (req, res) => {
 });
 
 const getPost = asyncHandler(async (req, res) => {
-  const data = await Posts.find();
+  const data = await Posts.aggregate([
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "owner",
+        from: "postcomments",
+        as: "comments",
+        pipeline: [
+          {
+            $lookup: {
+              localField: "userid",
+              foreignField: "_id",
+              from: "users",
+              as: "userDetails",
+              pipeline: [
+                {
+                  $project: {
+                    username: 1,
+                    fullName: 1,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "owner",
+        from: "likes",
+        as: "likes",
+      },
+    },
+  ]);
   return res
     .status(200)
     .json(new ApiResponse(200, data, "post sent successfully"));

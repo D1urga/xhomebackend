@@ -6,6 +6,7 @@ import {
   //   followingPosts,
   //   getAllusers,
   getCurrentUser,
+  getUser,
   //   getCurrentusers,
   loginUser,
   logoutUser,
@@ -19,6 +20,7 @@ router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/logout").post(logoutUser);
 router.route("/current-user").get(getCurrentUser);
+router.route("/getuser/:email").get(getUser);
 // router.route("/allUsers/:currentUser").get(getAllusers);
 // router.route("/currentUser/:user").get(getCurrentusers);
 // router.route("/follow/:followTo/:follower").post(follow);

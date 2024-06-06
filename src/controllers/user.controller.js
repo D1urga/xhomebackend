@@ -129,4 +129,10 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
-export { registerUser, loginUser, logoutUser, getCurrentUser };
+const getUser = asyncHandler(async (req, res) => {
+  const { email } = req.params;
+  const data = await User.findOne({ email });
+  return res.status(200).json(new ApiResponse(200, data, "fetched"));
+});
+
+export { registerUser, loginUser, logoutUser, getCurrentUser, getUser };
