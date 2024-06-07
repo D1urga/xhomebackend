@@ -9,13 +9,11 @@ const postPost = asyncHandler(async (req, res) => {
   const { owner } = req.params;
   const { message } = req.body;
   const imglocalpath = req.files?.img[0]?.path;
-  if (!imglocalpath) {
-    throw new ApiError(400, "content local file is required");
-  }
+
   const contentFile = await uploadOnCloudinary(imglocalpath);
   const urlVar = contentFile.url.slice(0, 4) + "s" + contentFile.url.slice(4);
 
-  const postData = await Posts.create({ img: urlVar, owner, message });
+  const postData = await Posts.create({ img: urlVar || "", owner, message });
 
   if (!postData) {
     throw new ApiError(500, "something went wrong");
