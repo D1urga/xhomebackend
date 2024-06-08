@@ -4,6 +4,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { Posts } from "../models/post.model.js";
 import { ObjectId } from "bson";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const postPost = asyncHandler(async (req, res) => {
   const { owner } = req.params;
@@ -29,7 +30,7 @@ const postPost = asyncHandler(async (req, res) => {
 const getPost = asyncHandler(async (req, res) => {
   const { currentUser } = req.params;
   const objectId = new ObjectId(currentUser);
-  const data = await Posts.aggregate([
+  const data = Posts.aggregate([
     {
       $lookup: {
         localField: "owner",
@@ -91,9 +92,19 @@ const getPost = asyncHandler(async (req, res) => {
       },
     },
   ]);
+
+  const options = {
+    page: parseInt(req.query.page) || 1,
+    limit: parseInt(req.query.limit) || 10,
+    customLabels: {
+      totalDocs: "totalResults",
+      docs: "items",
+    },
+  };
+  const result = await Posts.aggregatePaginate(data, options);
   return res
     .status(200)
-    .json(new ApiResponse(200, data, "post sent successfully"));
+    .json(new ApiResponse(200, result, "post sent successfully"));
 });
 
 export { postPost, getPost };
