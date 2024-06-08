@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middlewares.js";
 import {
+  getAllUsers,
   //   approveFollower,
   //   follow,
   //   followingPosts,
   //   getAllusers,
   getCurrentUser,
   getUser,
+  getUserById,
   //   getCurrentusers,
   loginUser,
   logoutUser,
@@ -21,6 +23,8 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(logoutUser);
 router.route("/current-user").get(getCurrentUser);
 router.route("/getuser/:email").get(getUser);
+router.route("/getAllUser").get(getAllUsers);
+router.route("/getUserById/:id").get(getUserById);
 // router.route("/allUsers/:currentUser").get(getAllusers);
 // router.route("/currentUser/:user").get(getCurrentusers);
 // router.route("/follow/:followTo/:follower").post(follow);

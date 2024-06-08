@@ -135,4 +135,27 @@ const getUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, data, "fetched"));
 });
 
-export { registerUser, loginUser, logoutUser, getCurrentUser, getUser };
+const getAllUsers = asyncHandler(async (req, res) => {
+  const data = await User.find({});
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "fetched successfully"));
+});
+
+const getUserById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const data = await User.findById(id);
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "fetched successfully"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getCurrentUser,
+  getUser,
+  getAllUsers,
+  getUserById,
+};
