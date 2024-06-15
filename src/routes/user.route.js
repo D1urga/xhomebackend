@@ -25,7 +25,7 @@ router.route("/logout").post(logoutUser);
 router.route("/current-user").get(getCurrentUser);
 router.route("/getuser/:email").get(getUser);
 router.route("/getAllUser").get(getAllUsers);
-router.route("/getUserById/:id/").get(getUserById);
+router.route("/getUserById/:id/:userid").get(getUserById);
 router.route("/testing").post(testing);
 // router.route("/allUsers/:currentUser").get(getAllusers);
 // router.route("/currentUser/:user").get(getCurrentusers);

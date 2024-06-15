@@ -144,7 +144,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 const getUserById = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id, userid } = req.params;
+  if (userid === "") {
+    throw new ApiError(400, "id required");
+  }
   const data = await User.aggregate([
     { $match: { _id: new ObjectId(id) } },
     {
@@ -174,7 +177,7 @@ const getUserById = asyncHandler(async (req, res) => {
     {
       $addFields: {
         isFollowing: {
-          $in: [new ObjectId(id), "$followers.follower"],
+          $in: [new ObjectId(userid), "$followers.follower"],
         },
       },
     },
