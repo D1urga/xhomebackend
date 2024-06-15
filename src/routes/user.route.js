@@ -14,6 +14,7 @@ import {
   logoutUser,
   registerUser,
   testing,
+  userprofile,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -26,6 +27,7 @@ router.route("/current-user").get(getCurrentUser);
 router.route("/getuser/:email").get(getUser);
 router.route("/getAllUser").get(getAllUsers);
 router.route("/getUserById/:id/:id2").get(getUserById);
+router.route("/userprofile/:id").get(userprofile);
 router.route("/testing").post(testing);
 // router.route("/allUsers/:currentUser").get(getAllusers);
 // router.route("/currentUser/:user").get(getCurrentusers);

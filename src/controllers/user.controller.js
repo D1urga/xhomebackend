@@ -188,6 +188,44 @@ const getUserById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, data, "fetched successfully"));
 });
 
+const userprofile = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const data = await User.aggregate([
+    { $match: { _id: new ObjectId(id) } },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "owner",
+        from: "posts",
+        as: "allPost",
+      },
+    },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "followTo",
+        from: "follows",
+        as: "followers",
+      },
+    },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "follower",
+        from: "follows",
+        as: "following",
+      },
+    },
+    { $addFields: { totalFollowers: { $size: "$followers" } } },
+    { $addFields: { totalFollowing: { $size: "$following" } } },
+    { $addFields: { totalPost: { $size: "$allPost" } } },
+  ]);
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "fetched successfully"));
+});
+
 const testing = asyncHandler(async (req, res) => {
   const { input } = req.body;
   const genAI = new GoogleGenerativeAI(
@@ -212,4 +250,5 @@ export {
   getAllUsers,
   getUserById,
   testing,
+  userprofile,
 };
