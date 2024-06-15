@@ -14,7 +14,7 @@ const follow = asyncHandler(async (req, res) => {
   });
   console.log(ispresent);
   if (ispresent.length != 0) {
-    throw new ApiError(401, "already following");
+    throw new ApiError(409, "already following");
   }
   const data = await Follows.create({ followTo, follower });
   return res
