@@ -171,6 +171,13 @@ const getUserById = asyncHandler(async (req, res) => {
         as: "following",
       },
     },
+    {
+      $addFields: {
+        isFollowing: {
+          $in: [new ObjectId(id), "$followers.follower"],
+        },
+      },
+    },
     { $addFields: { totalFollowers: { $size: "$followers" } } },
     { $addFields: { totalFollowing: { $size: "$following" } } },
   ]);
