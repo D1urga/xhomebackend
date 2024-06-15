@@ -13,6 +13,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  testing,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -25,6 +26,7 @@ router.route("/current-user").get(getCurrentUser);
 router.route("/getuser/:email").get(getUser);
 router.route("/getAllUser").get(getAllUsers);
 router.route("/getUserById/:id").get(getUserById);
+router.route("/testing").post(testing);
 // router.route("/allUsers/:currentUser").get(getAllusers);
 // router.route("/currentUser/:user").get(getCurrentusers);
 // router.route("/follow/:followTo/:follower").post(follow);

@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 // import { FollowerFollowing } from "../models/followerFollowing.model.js";
 // import { FollowRequests } from "../models/followRequests.model.js";
 import { ObjectId } from "bson";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -144,10 +145,53 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const data = await User.findById(id);
+  const data = await User.aggregate([
+    { $match: { _id: new ObjectId(id) } },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "owner",
+        from: "posts",
+        as: "allPost",
+      },
+    },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "followTo",
+        from: "follows",
+        as: "followers",
+      },
+    },
+    {
+      $lookup: {
+        localField: "_id",
+        foreignField: "follower",
+        from: "follows",
+        as: "following",
+      },
+    },
+    { $addFields: { totalFollowers: { $size: "$followers" } } },
+    { $addFields: { totalFollowing: { $size: "$following" } } },
+  ]);
   return res
     .status(200)
     .json(new ApiResponse(200, data, "fetched successfully"));
+});
+
+const testing = asyncHandler(async (req, res) => {
+  const { input } = req.body;
+  const genAI = new GoogleGenerativeAI(
+    "AIzaSyCPPW9GPz4OrkBVSIS5DoZgb62b5Q3Nji4",
+  );
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const prompt =
+    "i am anoop kumar a coder developer and investor 5 times hackathon winner write a detailed summary on me ";
+  const result = await model.generateContent(input);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+  return res.status(200).json(new ApiResponse(200, text, "working properly"));
 });
 
 export {
@@ -158,4 +202,5 @@ export {
   getUser,
   getAllUsers,
   getUserById,
+  testing,
 };
