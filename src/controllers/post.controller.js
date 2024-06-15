@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { Posts } from "../models/post.model.js";
 import { ObjectId } from "bson";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { PostComments } from "../models/postComment.model.js";
 
 const postPost = asyncHandler(async (req, res) => {
   const { owner } = req.params;
@@ -107,4 +108,18 @@ const getPost = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, result, "post sent successfully"));
 });
 
-export { postPost, getPost };
+const deletePost = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const present = await Posts.findById(id);
+  if (!present) {
+    throw new ApiError(404, "post not found");
+  }
+
+  const data = await Posts.findByIdAndDelete(id);
+  const comments = await PostComments.deleteMany({ owner: id });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "deleted successfully"));
+});
+
+export { postPost, getPost, deletePost };
