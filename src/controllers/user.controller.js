@@ -180,6 +180,7 @@ const getUserById = asyncHandler(async (req, res) => {
     },
     { $addFields: { totalFollowers: { $size: "$followers" } } },
     { $addFields: { totalFollowing: { $size: "$following" } } },
+    { $addFields: { totalPost: { $size: "$allPost" } } },
   ]);
   return res
     .status(200)
