@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { follow } from "../controllers/follows.controller.js";
+import { follow, unfollow } from "../controllers/follows.controller.js";
 
 const router = Router();
 
 router.route("/follow/:followTo/:follower").post(follow);
+router.route("/unfollow/:followTo/:follower").post(unfollow);
 
 export default router;
