@@ -19,10 +19,15 @@ const postTag = asyncHandler(async (req, res) => {
   const userid = user._id;
   const ownername = await User.findById(owner);
   const name = ownername.username;
-  const data = await Notifs.create({ owner, userid, name });
+  const data = await Notifs.create({ owner, taggedTo: userid, name });
   return res
     .status(200)
     .json(new ApiResponse(200, data, "posted successfully"));
+});
+
+const getTagged = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const data = await Notifs.find({ owner: id });
 });
 
 export { postTag };
