@@ -23,10 +23,12 @@ import useRouter from "./routes/user.route.js";
 import commentRouter from "./routes/postComment.route.js";
 import likesRouter from "./routes/likes.route.js";
 import followRouter from "./routes/follow.route.js";
+import notifRouter from "./routes/notif.routes.js";
 app.use("/api/v1/likes", likesRouter);
 app.use("/api/v1/user", useRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/follow", followRouter);
 app.use("/api/v1/comments", commentRouter);
+app.use("/api/v1/notif", notifRouter);
 
 export { app };
