@@ -27,7 +27,10 @@ const postTag = asyncHandler(async (req, res) => {
 
 const getTagged = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const data = await Notifs.find({ owner: id });
+  const data = await Notifs.find({ taggedTo: id });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, data, "fetched successfully"));
 });
 
-export { postTag };
+export { postTag, getTagged };
