@@ -9,6 +9,9 @@ const notifSchema = new mongoose.Schema(
     name: {
       type: String,
     },
+    message: {
+      type: String,
+    },
     taggedTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
