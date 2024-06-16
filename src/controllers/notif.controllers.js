@@ -9,7 +9,7 @@ import { User } from "../models/user.model.js";
 import { Notifs } from "../models/notif.models.js";
 
 const postTag = asyncHandler(async (req, res) => {
-  const { username } = req.body;
+  const { username, message } = req.body;
   const { owner } = req.params;
   const user = await User.findOne({ username: username });
 
@@ -19,7 +19,7 @@ const postTag = asyncHandler(async (req, res) => {
   const userid = user._id;
   const ownername = await User.findById(owner);
   const name = ownername.username;
-  const data = await Notifs.create({ owner, taggedTo: userid, name });
+  const data = await Notifs.create({ owner, taggedTo: userid, name, message });
   return res
     .status(200)
     .json(new ApiResponse(200, data, "posted successfully"));
